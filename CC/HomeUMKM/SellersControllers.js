@@ -21,7 +21,7 @@ const getSellerById = async (req, res) => {
     const seller = await firestore.collection('sellers').doc(sellerId).get(); 
 
     if (!seller.exists) {
-      return res.status(404).json({ success: false, message: 'Seller not found' }); //ganti jg bole
+      return res.status(404).json({ success: false, message: 'Seller not found' }); //ganti jg boleh
     }
 
     const sellerData = seller.data();
