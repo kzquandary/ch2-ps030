@@ -8,8 +8,17 @@ const { DeleteUsers } = require('./Delete');
 const { ConfirmEmail } = require('./Auth/ConfirmEmail');
 const { ForgotPassword } = require('./Auth/ForgotPassword');
 const { Authorization } = require('./Middleware/Authorization');
-const CustomerControllers = require('./HomeCustomers/CustomersControllers');
-const SellerControllers = require('./HomeUMKM/SellersControllers');
+const { getCustomerById, getCustomers} = require('./HomeCustomers/CustomersControllers');
+const { getSellerById, getSellers} = require('./HomeUMKM/SellersControllers');
+const { AddProduct } = require('./Product/AddProduct');
+const { GetProductById } = require('./Product/GetProductById');
+const { GetProductBySeller } = require('./Product/GetProductBySeller');
+const { GetProductByCategory } = require('./Product/GetProductByCategory');
+const { UpdateProduct } = require('./Product/UpdateProduct');
+const { ShoppingCart } = require('./ShoppingCart/ShoppingCart');
+const { GetCartByCustomers } = require('./ShoppingCart/GetCartByCustomers');
+const { GetCartById } = require('./ShoppingCart/GetCartById');
+const { GetTotalPrice } = require('./ShoppingCart/GetPriceTotal');
 routes.get('/', (req, res) => {
   return 'Unauthorized Access';
 });
@@ -21,24 +30,31 @@ routes.post('/api/auth/confirm', ConfirmEmail);
 routes.post('/api/auth/forgotpassword', ForgotPassword);
 
 // Customers Page Routes
-routes.get('/api/customers', CustomerControllers.getCustomers);
-routes.get('/api/customers/:id', CustomerControllers.getCustomerById);
+routes.get('/api/customers', getCustomers);
+routes.get('/api/customers/:id', getCustomerById);
 
 // Sellers Pages Route
-routes.get('/api/sellers', SellerControllers.getSellers);
-routes.get('/api/sellers/:id', SellerControllers.getSellerById);
-// routes.post('/api/sellers/setstatustoko', Customer);
+routes.get('/api/sellers', getSellers);
+routes.get('/api/sellers/:id', getSellerById);
+routes.put('/api/setstatustoko/');
 
 // Product Routes
-// routes.get('/api/product', Customer);
-// routes.get('/api/product/:id', Customer);
-// routes.post('/api/product', Customer);
-// routes.put('/api/product', Customer);
+routes.get('/api/product/:id', GetProductById);
+routes.get('/api/product/seller/:username', GetProductBySeller);
+routes.get('/api/product/category/:category', GetProductByCategory);
+routes.post('/api/product', AddProduct);
+routes.put('/api/product', UpdateProduct);
+
+//ShoppingCart Routes
+routes.post('/api/shopping', ShoppingCart);
+routes.get('/api/shopping/:customers', GetCartByCustomers);
+routes.get('/api/shopping/details/:id', GetCartById);
+routes.get('/api/shopping/total/:id', GetTotalPrice);
 
 // Settings Routes
-routes.put('/api/settings/changedetails', ForgotPassword);
-routes.put('/api/settings/changepassword', ForgotPassword);
-routes.post('/api/settings/', ForgotPassword);
+// routes.put('/api/settings/changedetails', ForgotPassword);
+// routes.put('/api/settings/changepassword', ForgotPassword);
+// routes.post('/api/settings/', ForgotPassword);
 
 // Notification Routes
 // routes.get('/api/notifications/:id', Notification);
@@ -50,6 +66,8 @@ routes.post('/api/settings/', ForgotPassword);
 // routes.get('/api/transactions/details/:id', Transaction);
 
 // Review Routes
+
+
 // Middleware Route
 routes.post('/api/middleware/authorization', Authorization);
 routes.delete('/cleanup', DeleteUsers);
