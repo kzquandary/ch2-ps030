@@ -4,7 +4,6 @@ var routes = express.Router();
 const jwt = require('jsonwebtoken');
 const { Login } = require('./Auth/Login');
 const { Register } = require('./Auth/Register');
-const { DeleteUsers } = require('./Delete');
 const { ConfirmEmail } = require('./Auth/ConfirmEmail');
 const { ForgotPassword } = require('./Auth/ForgotPassword');
 const { Authorization } = require('./Middleware/Authorization');
@@ -70,6 +69,5 @@ routes.get('/api/shopping/total/:id', GetTotalPrice);
 
 // Middleware Route
 routes.post('/api/middleware/authorization', Authorization);
-routes.delete('/cleanup', DeleteUsers);
 
 module.exports = routes;
