@@ -6,7 +6,6 @@ async function Register(req, res) {
   const {
     alamat,
     email,
-    kategori,
     nama,
     no_hp,
     owner,
@@ -63,8 +62,8 @@ async function Register(req, res) {
     // Hash the password before storing it in the database
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Determine whether it's a customer or seller registration based on the presence of 'kategori'
-    const collectionName = kategori ? "sellers" : "customers";
+    // Determine whether it's a customer or seller registration based on the presence of 'owner'
+    const collectionName = owner ? "sellers" : "customers";
 
     // Create a new user in the appropriate collection with GeoPoint
     const newUser = {
@@ -81,9 +80,8 @@ async function Register(req, res) {
       emailVerified: false,
     };
 
-    if (kategori) {
-      newUser.kategori = kategori;
-      newUser.owner = owner || ""; // Assuming owner is an optional field for sellers
+    if (owner) {
+      newUser.owner = owner;
     }
 
     await firestore.collection(collectionName).add(newUser);
