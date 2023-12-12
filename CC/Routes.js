@@ -24,6 +24,7 @@ const { AddTransaction } = require('./Transactions/AddTransactions');
 const { GetTransaction } = require('./Transactions/GetTransaction');
 const { GetTransactionById } = require('./Transactions/GetTransactionById');
 const { SearchUMKM } = require("./HomeCustomers/SearchUMKM");
+const { GetUMKMByUsername } = require("./HomeCustomers/GetUMKMByUsername");
 routes.get("/", (req, res) => {
   res.status(200).json({ success: true, message: "API Active" });
 });
@@ -43,7 +44,7 @@ routes.get("/api/customers", GetCustomer);
 
 // Sellers Pages Route
 routes.get("/api/sellers", GetSellers);
-// routes.get("/api/sellers/:id", GetSellersById);
+routes.get("/api/sellers/:username", GetUMKMByUsername);
 // routes.put("/api/setstatustoko/");
 
 // Product Routes
