@@ -83,7 +83,7 @@ async function Login(req, res) {
 
         // Create a new token with expiration set to one week (31 days)
         const newToken = jwt.sign(
-          { username: user.username, role },
+          { username: user.username, alamat:user.alamat ,role },
           secretKey,
           { expiresIn: "31d" } // 31 days
         );

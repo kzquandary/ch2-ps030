@@ -8,7 +8,6 @@ handlers:
     script: auto
 readiness_check:
   app_start_timeout_sec: 300 
-  runtime: nodejs20
 automatic_scaling:
   min_idle_instances: automatic
   max_idle_instances: automatic

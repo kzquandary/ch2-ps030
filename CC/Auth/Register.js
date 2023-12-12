@@ -77,7 +77,7 @@ async function Register(req, res) {
       no_hp,
       password: hashedPassword,
       username,
-      emailVerified: false,
+      emailVerified: true,
     };
 
     if (owner) {

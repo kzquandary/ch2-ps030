@@ -16,7 +16,31 @@ async function GetCartById(req, res) {
             // Assuming cart_id is unique, there should be only one document in the result set
             const cartDoc = cartQuery.docs[0];
             const cartData = cartDoc.data();
-            res.status(200).json({ success: true, data: cartData });
+            const items = cartData.items;
+
+            let totalPrice = 0;
+
+            // Calculate total price based on product IDs and quantities
+            for (const item of items) {
+                const productQuery = await firestore.collection('product').where('product_id', '==', item.product_id).get();
+
+                if (!productQuery.empty) {
+                    const productDoc = productQuery.docs[0];
+                    const productData = productDoc.data();
+                    totalPrice += parseFloat(productData.product_price) * item.qty;
+                }
+            }
+
+            // Add total price to the response
+            const response = {
+                success: true,
+                data: {
+                    ...cartData,
+                    total_price: totalPrice,
+                },
+            };
+
+            res.status(200).json(response);
         }
     } catch (error) {
         console.error('Error getting shopping cart by ID:', error);
