@@ -16,49 +16,48 @@ const GetCustomer = async (req, res) => {
         const username = decodedToken.username;
 
         // Mencari data penjual berdasarkan username
-        const sellersSnapshot = await firestore.collection('customers').where('username', '==', username).get();
+        const customersSnapshot = await firestore.collection('customers').where('username', '==', username).get();
 
-        if (sellersSnapshot.empty) {
-          return res.status(404).json({ success: false, message: 'Seller not found' });
+        if (customersSnapshot.empty) {
+          return res.status(404).json({ success: false, message: 'customer not found' });
         }
 
         // Ambil data penjual sesuai username dari token JWT
-        const sellerData = sellersSnapshot.docs[0].data();
+        const customerData = customersSnapshot.docs[0].data();
 
         // Extract hanya bidang yang diinginkan
-        const filteredSellerData = {
-          nama: sellerData.nama,
-          owner: sellerData.owner,
-          no_hp: sellerData.no_hp,
-          email: sellerData.email,
-          alamat: sellerData.alamat,
-          current_location: sellerData.current_location,
-          username: sellerData.username,
+        const filteredcustomerData = {
+          nama: customerData.nama,
+          owner: customerData.owner,
+          no_hp: customerData.no_hp,
+          email: customerData.email,
+          alamat: customerData.alamat,
+          current_location: customerData.current_location,
+          username: customerData.username,
         };
 
-        return res.status(200).json({ success: true, data: [filteredSellerData] });
+        return res.status(200).json({ success: true, data: [filteredcustomerData] });
       } catch (error) {
         console.error('Error verifying JWT:', error);
         return res.status(401).json({ success: false, message: 'Invalid token' });
       }
     } else {
-      // Jika tidak ada header Authorization, ambil semua data penjual (sellers)
-      const sellersSnapshot = await firestore.collection('sellers').get();
+      // Jika tidak ada header Authorization, ambil semua data penjual (customers)
+      const customersSnapshot = await firestore.collection('customers').get();
 
-      const sellersData = sellersSnapshot.docs.map(doc => {
-        const sellerData = doc.data();
+      const customersData = customersSnapshot.docs.map(doc => {
+        const customerData = doc.data();
         return {
-          nama: sellerData.nama,
-          owner: sellerData.owner,
-          no_hp: sellerData.no_hp,
-          email: sellerData.email,
-          alamat: sellerData.alamat,
-          current_location: sellerData.current_location,
-          username: sellerData.username,
+          nama: customerData.nama,
+          no_hp: customerData.no_hp,
+          email: customerData.email,
+          alamat: customerData.alamat,
+          current_location: customerData.current_location,
+          username: customerData.username,
         };
       });
 
-      return res.status(200).json({ success: true, sellers: sellersData });
+      return res.status(200).json({ success: true, customers: customersData });
     }
   } catch (error) {
     console.error('Error:', error);

@@ -40,7 +40,7 @@ async function Register(req, res) {
 
     if (!customerQuery.empty || !sellerQuery.empty) {
       return res
-        .status(400)
+        .status(401)
         .json({ success: false, message: "Username/Email telah digunakan" });
     }
 

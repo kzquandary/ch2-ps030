@@ -1,0 +1,873 @@
+openapi: 3.0.0
+info:
+  title: Kulinerin API
+  version: "1.0"
+  description: API for Kulinerin App
+  # termsOfService: https://capstoneprojectmicro.as.r.appspot.com/terms
+  contact:
+    name: Kzquandary
+    email: kzquandary@gmail.com
+  # license:
+  #   name: Lisensi API
+  #   url: https://capstoneprojectmicro.as.r.appspot.com/license
+servers:
+  - url: https://capstoneprojectmicro.as.r.appspot.com/
+    description: URL Prod
+tags:
+  - name: Auth
+    description: Login / Register
+  - name: Home
+    description: Akses Fitur Home
+  - name: Shopping Cart
+    description: Add Product Activity
+  - name: Transaction
+    description: Make Transaction Activity
+  - name: Review
+    description: Make Review Activity
+  - name: Profile
+    description: Get User Data or Update
+paths:
+  /api/auth/register:
+    post:
+      summary: REGISTER
+      tags:
+        - "Auth"
+      description: Endpoint to register a new user with the provided information.
+      requestBody:
+        description: User registration data
+        required: true
+        content:
+          application/json:
+            example:
+              alamat: "Jl. Tipar Barat, Laksanamekar, Kec. Padalarang, Kabupaten Bandung Barat, Jawa Barat 40553"
+              email: "kzquandary@gmail.com"
+              nama: "Kzquandary"
+              no_hp: "123456789"
+              password: "kzquandary"
+              username: "kzquandary"
+              latitude: "-6.878810"
+              longitude: "107.513496"
+      responses:
+        "201":
+          description: User successfully registered
+          content:
+            application/json:
+              example:
+                success: true
+                message: Registrasi telah berhasil
+        "400":
+          description: Bad Request - Invalid input or missing required fields or Location must be available or Username/Email already in use
+          content:
+            application/json:
+              example:
+                invalidInput:
+                  value:
+                    success: false
+                    message: Harap isi seluruh form
+                locationNotAvailable:
+                  value:
+                    success: false
+                    message: Lokasi harus tersedia
+                usernameEmailInUse:
+                  value:
+                    success: false
+                    message: Username/Email telah digunakan
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              example:
+                success: false
+                message: Server Error
+  /api/auth/login:
+    post:
+      summary: LOGIN
+      tags:
+        - "Auth"
+      description: Endpoint to authenticate a user and generate an access token.
+      requestBody:
+        description: User login data
+        required: true
+        content:
+          application/json:
+            example:
+              identifier: "kzquandary1"
+              password: "kzquandary"
+      responses:
+        "200":
+          description: User successfully logged in
+          content:
+            application/json:
+              example:
+                success: true
+                token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Imt6cXVhbmRhcnkxIiwiYWxhbWF0IjoiSmwuIFBhc2lya2FsaWtpIE5vLiAxMjEtMTIzIFBhamFqYXJhbiBDaWNlbmRvIEJhbmR1bmcgSmF3YSBCYXJhdCIsInJvbGUiOiJjdXN0b21lcnMiLCJpYXQiOjE3MDI2MDM2NjQsImV4cCI6MTcwNTI4MjA2NH0.srttwZLD4sHD6ZnPOchygmjd5OFZtic2Fisr-TQceZA"
+        "401":
+          description: Unauthorized - Email/Username not registered, Password incorrect, or Email not verified
+          content:
+            application/json:
+              examples:
+                notRegistered:
+                  value:
+                    success: false
+                    message: Email/Username tidak terdaftar
+                incorrectPassword:
+                  value:
+                    success: false
+                    message: Password yang anda masukan salah
+                emailNotVerified:
+                  value:
+                    success: false
+                    message: Email belum diverifikasi, Periksa email untuk instruksi selanjutnya
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              example:
+                success: false
+                message: Internal Server Error
+  /api/customers:
+    get:
+      summary: GET CUSTOMER DATA
+      tags:
+        - "Profile"
+      description: Mengambil semua data customers jika tidak ada header, Gunakan header JWT untuk mengambil data dari spesifik user, untuk penggunaan Bearer {Token}.
+      parameters:
+        - name: Authorization
+          in: header
+          description: Bearer token for authentication
+          schema:
+            type: string
+            format: jwt
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example:
+                success: true
+                data:
+                  - nama: "Nama Customer"
+                    owner: "Owner Customer"
+                    no_hp: "Nomor HP Customer"
+                    email: "Email Customer"
+                    alamat: "Alamat Customer"
+                    current_location:
+                      latitude: -6.2088
+                      longitude: 106.8456
+                    username: "Username Customer"
+        '401':
+          description: Unauthorized - Invalid token
+          content:
+            application/json:
+              example:
+                success: false
+                message: Invalid token
+        '404':
+          description: Not Found - customers not found
+          content:
+            application/json:
+              example:
+                success: false
+                message: customers not found
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              example:
+                success: false
+                message: Server Error
+  /api/home/nearbyumkm:
+    get:
+      summary: GET UMKM TERDEKAT
+      tags:
+        - "Home"
+      description: Gunakan header JWT untuk mencari UMKM terdekat.
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example:
+                success: true
+                data:
+                  - nama: "UMKM Name"
+                    no_hp: "UMKM Phone Number"
+                    current_location:
+                      latitude: -6.2088
+                      longitude: 106.8456
+                    alamat: "UMKM Address"
+                    owner: "UMKM Owner"
+                    username: "umkm_username"
+        '401':
+          description: Unauthorized - Invalid token
+          content:
+            application/json:
+              example:
+                success: false
+                message: Invalid token
+        '404':
+          description: Not Found - Address not found
+          content:
+            application/json:
+              example:
+                success: false
+                error: "Alamat tidak ditemukan."
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              example:
+                success: false
+                error: "Internal Server Error"
+      parameters:
+        - name: Authorization
+          in: header
+          description: Bearer token for authentication
+          required: true
+          schema:
+            type: string
+            format: jwt
+  /api/home/searchumkm:
+    post:
+      summary: CARI TOKO/UMKM
+      tags:
+        - "Home"
+      description: Retrieve UMKM information based on the provided keyword.
+      requestBody:
+        description: Search UMKM data
+        required: true
+        content:
+          application/json:
+            example:
+              keyword: "Ayam Geprek"
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example:
+                success: true
+                data:
+                  - nama: "Ayam Geprek Pak Haji"
+                    no_hp: "123456"
+                    current_location:
+                      latitude: -6.2088
+                      longitude: 106.8456
+                    alamat: "Bogor"
+                    owner: "Pak Haji"
+                    username: "geprekhaji"
+                  - nama: "Ayam Geprek Yasmin"
+                    no_hp: "123456"
+                    current_location:
+                      latitude: -6.2088
+                      longitude: 106.8456
+                    alamat: "Bogor"
+                    owner: "Yasmin"
+                    username: "cutyasmin"
+        '400':
+          description: Bad Request - Keyword is required in the request body
+          content:
+            application/json:
+              example:
+                success: false
+                error: "Keyword is required in the request body."
+        '404':
+          description: Not Found - No UMKM found for the specified keyword
+          content:
+            application/json:
+              example:
+                success: false
+                message: "No UMKM found for the specified keyword."
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              example:
+                success: false
+                error: "Internal Server Error"
+  /api/sellers/{username}:
+    get:
+      summary: GET DETAIL TOKO
+      tags:
+        - "Home"
+      description: Retrieve UMKM information based on the provided username.
+      parameters:
+        - name: username
+          in: path
+          description: UMKM username
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example:
+                success: true
+                data:
+                  - nama: "Nur Faid Prasetyo"
+                    no_hp: "089662966963"
+                    current_location:
+                      _latitude: -6.9271552
+                      _longitude: 107.6166656
+                    alamat: "Bogor"
+                    owner: "Agus"
+                    username: "nurfaid"
+                    product_list: [
+                      {
+                        product_id: "1234",
+                        product_name: "Updated Seblak",
+                        product_price: "15000",
+                        product_description: "Hello World",
+                        product_category: "Makanan",
+                        image_url: "https://storage.googleapis.com/kulinerin_dev/c7963e26-ea88-4a82-9524-ae9526fbd495.jpg",
+                        active: true,
+                        created_at: {
+                          _seconds: 1702204268,
+                          _nanoseconds: 780000000,
+                        },
+                      },
+                    ]
+        '404':
+          description: Not Found - UMKM not found for the specified username
+          content:
+            application/json:
+              example:
+                success: false
+                message: "UMKM not found for the specified username."
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              example:
+                success: false
+                error: "Internal Server Error"
+  /api/shopping:
+    post:
+      summary: ADD PEMESANAN PRODUK
+      tags:
+        - "Shopping Cart"
+      description: Add or update items in the shopping cart for a specific seller.
+      requestBody:
+        description: Shopping cart information
+        required: true
+        content:
+          application/json:
+            example:
+              type: "plus"
+              sellers: "fiyanda"
+              items: "2345"
+      security:
+        - bearerAuth: [] # Use this if authentication is required for the endpoint
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example:
+                success: true
+                message: "Shopping cart updated successfully."
+        '201':
+          description: Created - New shopping cart created
+          content:
+            application/json:
+              example:
+                success: true
+                message: "New shopping cart created."
+        '401':
+          description: Unauthorized - Invalid token
+          content:
+            application/json:
+              example:
+                success: false
+                message: "Invalid token"
+        '404':
+          description: Not Found - Item not found in the shopping cart
+          content:
+            application/json:
+              example:
+                success: false
+                message: "Item not found in the shopping cart."
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              example:
+                success: false
+                error: "Internal Server Error"
+      parameters:
+        - name: Authorization
+          in: header
+          description: Bearer token for authentication
+          required: true
+          schema:
+            type: string
+            format: jwt
+    get:
+      summary: GET SHOPPING CART BY CUSTOMERS
+      tags:
+        - "Shopping Cart"
+      description: Retrieve shopping cart information for a specific customer.
+      security:
+        - bearerAuth: [] # Use this if authentication is required for the endpoint
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example:
+                success: true
+                data:
+                  - cart_id: "270a645c-1542-403a-8fec-4e37b6081a49"
+                    customers: "kzquandary1"
+                    sellers: "fiyanda"
+                    alamat: "Jl. Pasirkaliki No. 121-123 Pajajaran Cicendo Bandung Jawa Barat"
+                    items:
+                      - product_id: "2345"
+                        qty: 3
+                      - product_id: "1234"
+                        qty: 2
+        '401':
+          description: Unauthorized - Invalid token
+          content:
+            application/json:
+              example:
+                success: false
+                message: "Invalid token"
+        '404':
+          description: Not Found - Shopping cart not found for the specified customer
+          content:
+            application/json:
+              example:
+                success: false
+                message: "Shopping cart not found for the specified customer."
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              example:
+                success: false
+                error: "Internal Server Error"
+      parameters:
+        - name: Authorization
+          in: header
+          description: Bearer token for authentication
+          required: true
+          schema:
+            type: string
+            format: jwt
+  /api/shopping/details/{cart_id}:
+    get:
+      summary: GET SHOPPING CART BY ID
+      tags:
+        - "Shopping Cart"
+      description: Retrieve details of a specific shopping cart by its unique identifier.
+      security:
+        - bearerAuth: [] # Use this if authentication is required for the endpoint
+      parameters:
+        - name: cart_id
+          in: path
+          description: ID of the shopping cart to retrieve details
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example:
+                success: true
+                data:
+                  cart_id: "270a645c-1542-403a-8fec-4e37b6081a49"
+                  customers: "kzquandary1"
+                  sellers: "fiyanda"
+                  alamat: "Jl. Pasirkaliki No. 121-123 Pajajaran Cicendo Bandung Jawa Barat"
+                  items:
+                    - product_id: "2345"
+                      qty: 3
+                    - product_id: "1234"
+                      qty: 2
+                  total_price: 60000
+        '401':
+          description: Unauthorized - Invalid token
+          content:
+            application/json:
+              example:
+                success: false
+                message: "Invalid token"
+        '404':
+          description: Not Found - Shopping cart not found for the specified ID
+          content:
+            application/json:
+              example:
+                success: false
+                message: "Shopping cart not found for the specified ID."
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              example:
+                success: false
+                error: "Internal Server Error"
+  /api/transactions:
+    post:
+      summary: ADD TRANSAKSI
+      tags:
+        - "Transaction"
+      description: Add a new transaction based on the provided information.
+      security:
+        - bearerAuth: [] # Use this if authentication is required for the endpoint
+      requestBody:
+        required: true
+        content:
+          application/json:
+            example:
+              cart_id: "283c3dca-716b-4ff8-938b-10c6e2c48ebf"
+              sellers: "fiyanda"
+              items:
+                - product_id: "1234"
+                  qty: 2
+                - product_id: "2345"
+                  qty: 2
+              total_price: 60000
+              alamat: "Jl. Pasirkaliki No. 121-123 Pajajaran Cicendo Bandung Jawa Barat"
+              notes: "Additional notes or comments"
+      responses:
+        '201':
+          description: Successfully added transaction
+          content:
+            application/json:
+              example:
+                success: true
+                message: "Transaction added successfully."
+        '401':
+          description: Unauthorized - Invalid token
+          content:
+            application/json:
+              example:
+                success: false
+                message: "Invalid token"
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              example:
+                success: false
+                error: "Internal Server Error"
+      parameters:
+        - name: Authorization
+          in: header
+          description: Bearer token for authentication
+          required: true
+          schema:
+            type: string
+            format: jwt
+    get:
+      summary: GET TRANSAKSI BY CUSTOMERS
+      tags:
+        - "Transaction"
+      description: Retrieve transaction history for a specific customer.
+      security:
+        - bearerAuth: [] # Use this if authentication is required for the endpoint
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example:
+                success: true
+                data:
+                  - transaction_id: "84b574c0-6fcb-4ff3-8190-6492e584c83b"
+                    sellers: "fiyanda"
+                    items:
+                      - product_id: "1234"
+                        qty: 2
+                      - product_id: "2345"
+                        qty: 2
+                    total_price: 60000
+                    alamat: "Jl. Pasirkaliki No. 121-123 Pajajaran Cicendo Bandung Jawa Barat"
+                    notes: "Additional notes or comments"
+                    status: "Diterima"
+                  - transaction_id: "283c3dca-716b-4ff8-938b-10c6e2c48ebf"
+                    sellers: "fiyanda"
+                    items:
+                      - product_id: "1234"
+                        qty: 2
+                      - product_id: "2345"
+                        qty: 2
+                    total_price: 60000
+                    alamat: "Jl. Pasirkaliki No. 121-123 Pajajaran Cicendo Bandung Jawa Barat"
+                    notes: "Additional notes or comments"
+                    status: "Pending"
+        '401':
+          description: Unauthorized - Invalid token
+          content:
+            application/json:
+              example:
+                success: false
+                message: "Invalid token"
+        '404':
+          description: Not Found - No transactions found for the specified customer
+          content:
+            application/json:
+              example:
+                success: false
+                message: "No transactions found for the specified customer."
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              example:
+                success: false
+                error: "Internal Server Error"
+      parameters:
+        - name: Authorization
+          in: header
+          description: Bearer token for authentication
+          required: true
+          schema:
+            type: string
+            format: jwt
+  /api/transactions/{transaction_id}:
+    get:
+      summary: GET TRANSAKSI BY ID
+      tags:
+        - "Transaction"
+      description: Retrieve a specific transaction by its unique identifier.
+      parameters:
+        - name: transaction_id
+          in: path
+          description: ID of the transaction to retrieve
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example:
+                success: true
+                data:
+                  transaction_id: "84b574c0-6fcb-4ff3-8190-6492e584c83b"
+                  sellers: "fiyanda"
+                  items:
+                    - product_id: "1234"
+                      qty: 2
+                    - product_id: "2345"
+                      qty: 2
+                  total_price: 60000
+                  alamat: "Jl. Pasirkaliki No. 121-123 Pajajaran Cicendo Bandung Jawa Barat"
+                  notes: "Additional notes or comments"
+                  status: "Diterima"
+        '401':
+          description: Unauthorized - Invalid token
+          content:
+            application/json:
+              example:
+                success: false
+                message: "Invalid token"
+        '404':
+          description: Not Found - Transaction not found for the specified ID
+          content:
+            application/json:
+              example:
+                success: false
+                message: "Transaction not found for the specified ID."
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              example:
+                success: false
+                error: "Internal Server Error"
+  /api/review:
+    post:
+      summary: ADD REVIEW
+      tags:
+        - "Review"
+      description: Add a new review based on the provided information.
+      security:
+        - bearerAuth: [] # Use this if authentication is required for the endpoint
+      requestBody:
+        required: true
+        content:
+          application/json:
+            example:
+              transaction_id: "2345"
+              review_description: "Makanannya sangat enak"
+              sellers: "fiyanda"
+      responses:
+        '201':
+          description: Successfully added review
+          content:
+            application/json:
+              example:
+                success: true
+                message: "Review added successfully."
+        '400':
+          description: Bad Request - Missing required fields
+          content:
+            application/json:
+              example:
+                success: false
+                message: "Missing required fields"
+        '401':
+          description: Unauthorized - Invalid token
+          content:
+            application/json:
+              example:
+                success: false
+                message: "Invalid token"
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              example:
+                success: false
+                error: "Internal Server Error"
+      parameters:
+        - name: Authorization
+          in: header
+          description: Bearer token for authentication
+          required: true
+          schema:
+            type: string
+            format: jwt
+    get:
+      summary: GET REVIEW FROM USERNAME
+      tags:
+        - "Review"
+      description: Retrieve reviews for the specified customer based on the JWT token.
+      security:
+        - bearerAuth: [] # Use this if authentication is required for the endpoint
+      responses:
+        '200':
+          description: Successfully retrieved reviews
+          content:
+            application/json:
+              example:
+                success: true
+                data:
+                  - review_description: "Makanan sangat enak"
+                    sellers: "fiyanda"
+                    sentimen: "positif"
+                    created_at:
+                      _seconds: 1702573200
+                      _nanoseconds: 754000000
+                  - transaction_id: "1234"
+                    review_description: "Makanannya sangat enak"
+                    sellers: "fiyanda"
+                    sentimen: "positive"
+                  - transaction_id: "2345"
+                    review_description: "Makanannya sangat enak"
+                    sellers: "fiyanda"
+                    sentimen: "positive"
+        '401':
+          description: Unauthorized - Invalid token
+          content:
+            application/json:
+              example:
+                success: false
+                message: "Invalid token"
+        '404':
+          description: No reviews found for the specified customer
+          content:
+            application/json:
+              example:
+                success: false
+                message: "No reviews found for the specified customer"
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              example:
+                success: false
+                error: "Internal Server Error"
+      parameters:
+        - name: Authorization
+          in: header
+          description: Bearer token for authentication
+          required: true
+          schema:
+            type: string
+            format: jwt
+  /api/profile/update:
+    put:
+      summary: UPDATE PROFILE
+      tags:
+        - "Profile"
+      description: Update the customer's profile information.
+      security:
+        - bearerAuth: [] # Use this if authentication is required for the endpoint
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                alamat:
+                  type: string
+                  description: New address for the customer
+                nama:
+                  type: string
+                  description: New name for the customer
+                no_tlp:
+                  type: string
+                  description: New phone number for the customer
+                email:
+                  type: string
+                  format: email
+                  description: New email address for the customer
+              example:
+                alamat: "Garut"
+                nama: "Prasetyo"
+                no_tlp: "089662966963"
+                email: "nurfaidp21@gmail.com"
+      responses:
+        '200':
+          description: Profile updated successfully
+          content:
+            application/json:
+              example:
+                success: true
+                message: "Profil berhasil diperbarui"
+        '400':
+          description: Bad Request - No data to update
+          content:
+            application/json:
+              example:
+                success: false
+                message: "Tidak ada data yang diperbarui"
+        '401':
+          description: Unauthorized - Invalid token
+          content:
+            application/json:
+              example:
+                success: false
+                message: "Unauthorized"
+        '404':
+          description: Not Found - Customer not found
+          content:
+            application/json:
+              example:
+                success: false
+                message: "Customer not found"
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              example:
+                success: false
+                message: "Server Error"
+      parameters:
+        - name: Authorization
+          in: header
+          description: Bearer token for authentication
+          required: true
+          schema:
+            type: string
+            format: jwt

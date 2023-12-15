@@ -45,7 +45,7 @@ async function AddProduct(req, res) {
         } = req.body;
 
         // Validate required fields
-        if (!active || !product_category || !product_name || !product_price || !username) {
+        if (!product_category || !product_name || !product_price || !username) {
           return res.status(400).json({ success: false, error: "Harap isi seluruh form" });
         }
 
@@ -72,7 +72,7 @@ async function AddProduct(req, res) {
 
           // Buat data untuk disimpan di Firestore
           const productData = {
-            active,
+            active: false,
             created_at: new Date(),
             image_url: imageUrl,
             product_category,

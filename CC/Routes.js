@@ -18,19 +18,22 @@ const { ShoppingCart } = require("./ShoppingCart/ShoppingCart");
 const { GetCartByCustomers } = require("./ShoppingCart/GetCartByCustomers");
 const { GetCartById } = require("./ShoppingCart/GetCartById");
 const { GetTotalPrice } = require("./ShoppingCart/GetPriceTotal");
-const { ParseAddress } = require("./HomeCustomers/ParseAddress");
 const { GetUMKMByDomisili } = require("./HomeCustomers/GetUMKMByDomisili");
 const { AddTransaction } = require('./Transactions/AddTransactions');
 const { GetTransaction } = require('./Transactions/GetTransaction');
 const { GetTransactionById } = require('./Transactions/GetTransactionById');
 const { SearchUMKM } = require("./HomeCustomers/SearchUMKM");
 const { GetUMKMByUsername } = require("./HomeCustomers/GetUMKMByUsername");
+const { GetReviewById } = require("./Review/GetReviewById");
+const { GetReviewByUsername } = require("./Review/GetReviewByUsername");
+const { AddReview } = require("./Review/AddReview");
+const { UpdateProfile } = require("./Profile/UpdateCustomer");
 routes.get("/", (req, res) => {
   res.status(200).json({ success: true, message: "API Active" });
 });
 
 //Home Routes
-routes.get("/api/home/getdomisili", GetUMKMByDomisili);
+routes.get("/api/home/nearbyumkm", GetUMKMByDomisili);
 routes.post("/api/home/searchumkm", SearchUMKM);
 
 // Auth Routes
@@ -41,6 +44,7 @@ routes.post("/api/auth/forgotpassword", ForgotPassword);
 
 // Customers Page Routes
 routes.get("/api/customers", GetCustomer);
+routes.put("/api/profile/update", UpdateProfile);
 
 // Sellers Pages Route
 routes.get("/api/sellers", GetSellers);
@@ -77,6 +81,9 @@ routes.get('/api/transactions/:id', GetTransactionById);
 // routes.get('/api/transactions/details/:id', Transaction);
 
 // Review Routes
+routes.post('/api/review', AddReview);
+routes.get('/api/review/', GetReviewByUsername);
+routes.get('/api/review/:id', GetReviewById);
 
 // Middleware Route
 routes.post("/api/middleware/authorization", Authorization);
