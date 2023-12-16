@@ -75,7 +75,7 @@
                     </div>
 
                     <div class="form-group text-start mb-3 position-relative">
-                        <input class="form-control" name="password" id="password" type="password"
+                        <input class="form-control" name="password" id="psw-input" type="password"
                             placeholder="Password">
                         <div class="position-absolute" id="password-visibility">
                             <i class="bi bi-eye"></i>
