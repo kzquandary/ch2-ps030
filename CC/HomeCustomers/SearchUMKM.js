@@ -2,18 +2,18 @@ const { firestore } = require('../Firebase');
 
 async function SearchUMKM(req, res) {
     try {
-        const { keyword } = req.body;
+        const { nama } = req.params;
 
-        // Check if keyword is present
-        if (!keyword) {
-            return res.status(400).json({ success: false, error: 'Keyword is required in the request body.' });
+        // Check if UMKM name is present
+        if (!nama) {
+            return res.status(400).json({ success: false, error: 'UMKM name is required as a route parameter.' });
         }
 
         // Get reference to the sellers collection
         const sellersRef = firestore.collection('sellers');
 
         // Create a case-insensitive regex pattern
-        const regexPattern = new RegExp(keyword, 'i');
+        const regexPattern = new RegExp(nama, 'i');
 
         // Query sellers based on the regex pattern
         const querySnapshot = await sellersRef.where('nama', '>=', '').where('nama', '<=', '\uf8ff').get();
@@ -22,7 +22,7 @@ async function SearchUMKM(req, res) {
         const matchingDocs = querySnapshot.docs.filter(doc => regexPattern.test(doc.data().nama));
 
         if (matchingDocs.length === 0) {
-            res.status(404).json({ success: false, message: 'No UMKM found for the specified keyword.' });
+            res.status(404).json({ success: false, message: 'No UMKM found for the specified name.' });
         } else {
             // Map the UMKM data
             const umkmList = matchingDocs.map(doc => {
@@ -34,7 +34,7 @@ async function SearchUMKM(req, res) {
                     alamat: seller.alamat,
                     owner: seller.owner,
                     username: seller.username,
-                    image_url: seller.image_url || null, // Include image_url in the response, use null if not assigned
+                    image_url: seller.image_url || null,
                 };
             });
 
