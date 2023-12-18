@@ -25,7 +25,7 @@ class LoginController extends Controller
                 // Simpan token ke dalam session dengan nama 'jwt'
                 Session::put('jwt', $apiResponse['token']);
 
-                return redirect('/')->with('success', 'Login berhasil');
+                return redirect('/home')->with('success', 'Login berhasil');
             } else {
                 return redirect('/login')->with('error', 'Login gagal. ' . $apiResponse['message']);
             }
@@ -34,5 +34,5 @@ class LoginController extends Controller
             return redirect('/register')->with('error', 'Login gagal. ' . $e->getMessage());
         }
     }
-    
+
 }

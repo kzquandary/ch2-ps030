@@ -28,6 +28,10 @@ const { GetReviewById } = require("./Review/GetReviewById");
 const { GetReviewByUsername } = require("./Review/GetReviewByUsername");
 const { AddReview } = require("./Review/AddReview");
 const { UpdateProfile } = require("./Profile/UpdateCustomer");
+const { GetUMKMTransaction } = require("./HomeUMKM/GetTransaction");
+const { GetUMKMProfile } = require("./HomeUMKM/GetUMKMProfile");
+const { DeleteProduct } = require("./Product/DeleteProduct");
+const { GetSeller } = require("./HomeCustomers/GetAllUMKM");
 routes.get("/", (req, res) => {
   res.status(200).json({ success: true, message: "API Active" });
 });
@@ -35,6 +39,7 @@ routes.get("/", (req, res) => {
 //Home Routes
 routes.get("/api/home/nearbyumkm", GetUMKMByDomisili);
 routes.post("/api/home/searchumkm", SearchUMKM);
+routes.get("/api/home/getallumkm", GetSeller);
 
 // Auth Routes
 routes.post("/api/auth/login", Login);
@@ -48,8 +53,10 @@ routes.put("/api/profile/update", UpdateProfile);
 
 // Sellers Pages Route
 routes.get("/api/sellers", GetSellers);
+routes.get("/api/sellers/details", GetUMKMProfile);
 routes.get("/api/sellers/:username", GetUMKMByUsername);
 // routes.put("/api/setstatustoko/");
+routes.get('/api/sellers/transaksi', GetUMKMTransaction)
 
 // Product Routes
 routes.get("/api/product/:id", GetProductById);
@@ -57,6 +64,7 @@ routes.get("/api/product/seller/:username", GetProductBySeller);
 routes.get("/api/product/category/:category", GetProductByCategory);
 routes.post("/api/product", AddProduct);
 routes.put("/api/product", UpdateProduct);
+routes.delete("/api/product/:product_id", DeleteProduct);
 
 //ShoppingCart Routes
 routes.post("/api/shopping", ShoppingCart);

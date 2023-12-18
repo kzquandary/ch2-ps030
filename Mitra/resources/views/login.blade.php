@@ -19,10 +19,10 @@
     <link rel="icon" href="img/core-img/favicon.ico">
     <!-- Style CSS -->
     <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10/dist/sweetalert2.min.css">
 
     <!-- Web App Manifest -->
-    <link rel="manifest" href="manifest.json">
+    {{-- <link rel="manifest" href="manifest.json"> --}}
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 
@@ -83,7 +83,24 @@
         </div>
     </div>
 
+    <div class="modal" id="locationPermissionModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Izinkan Akses Lokasi</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Kami membutuhkan Akses lokasi perangkat anda, harap izinkan akses lokasi pada browser anda dan nyalakan GPS.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="allowLocationBtn">Izinkan</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <!-- All JavaScript Files -->
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <script src="js/bootstrap.bundle.min.js"></script>
     <script src="js/slideToggle.min.js"></script>
     <script src="js/internet-status.js"></script>
@@ -98,7 +115,9 @@
     <script src="js/dark-rtl.js"></script>
     <script src="js/active.js"></script>
     <script src="js/pwa.js"></script>
-    {{-- <script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <script>
+        // Your existing geolocation code
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(
                 function(position) {
@@ -112,13 +131,22 @@
                 },
                 function(error) {
                     console.error("Error getting location: " + error.message);
+
+                    // Show the location permission modal
+                    $('#locationPermissionModal').modal('show');
                 }
             );
         } else {
             console.log("Geolocation is not supported by this browser.");
         }
-    </script> --}}
-    <script>
+
+        // Add event listener for the "Allow" button in the modal
+        document.getElementById('allowLocationBtn').addEventListener('click', function() {
+            // You may want to try to request location permission again here
+            // This might involve reloading the page or using another method to request permission
+        });
+    </script>
+    {{-- <script>
         // Fungsi untuk mendapatkan nilai cookie berdasarkan nama
         function getCookie(name) {
             var value = "; " + document.cookie;
@@ -134,7 +162,7 @@
         document.getElementById('longitude').value = longitude;
         console.log(latitude);
         console.log(longitude);
-    </script>
+    </script> --}}
 </body>
 
 </html>

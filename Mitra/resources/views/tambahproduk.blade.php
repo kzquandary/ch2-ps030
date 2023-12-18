@@ -48,7 +48,7 @@
                         </div>
                         <input type="hidden" name="active" value="false">
                         <!-- Input hidden untuk username -->
-                        <input type="hidden" name="username" value="kzquandary1">
+                        <input type="hidden" name="username" value="{{ $data->data[0]->username }}">
                         <button class="btn btn-primary w-100 d-flex align-items-center justify-content-center"
                             type="submit">
                             Tambah Produk

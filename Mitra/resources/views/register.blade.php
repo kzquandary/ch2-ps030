@@ -82,10 +82,10 @@
                             <i class="bi bi-eye-slash"></i>
                         </div>
                     </div>
+                    <div class="mb-3" id="pswmeter"></div>
                     <div class="form-group text-start mb-3">
                         <textarea class="form-control" name="alamat" id="alamat" placeholder="Masukan Alamat"></textarea>
                     </div>
-                    <div class="mb-3" id="pswmeter"></div>
                     <input type="hidden" name="latitude" id="latitude" value="">
                     <input type="hidden" name="longitude" id="longitude" value="">
                     <div class="form-check mb-3">

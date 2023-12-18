@@ -31,12 +31,14 @@ Route::post('/register', [RegisterController::class, 'register']);
 Route::get('/logout', [HomeController::class, 'logout']);
 
 //Home Routes
-Route::get('/', [HomeController::class, 'index']);
-
-Route::get('/addproduct', function () {
-    return view('tambahproduk');
+Route::get('/', function () {
+    return view('splash');
 });
+Route::get('/home', [HomeController::class, 'index']);
+Route::get('/addproduct', [AddProduct::class, 'ViewProduct']);
+
 Route::post('/addproduct', [AddProduct::class, 'addProduct']);
+Route::delete('/delete/{product_id}', [AddProduct::class, 'DeleteProduct']);
 
 Route::get('/transaksi', function () {
     return view('transaksi');

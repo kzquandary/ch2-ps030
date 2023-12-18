@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Session; // Import Session
 use Illuminate\Support\Facades\Validator;
 use GuzzleHttp\Client;
 
@@ -46,7 +46,7 @@ class AddProduct extends Controller
 
             if ($apiResponse['success']) {
                 // Jika sukses, arahkan pengguna ke halaman yang sesuai
-                return redirect('/')->with('product_success', 'Produk berhasil ditambahkan!');
+                return redirect('/home')->with('product_success', 'Produk berhasil ditambahkan!');
             } else {
                 // Jika gagal, kirim respons JSON dengan pesan kesalahan
                 return response()->json($apiResponse, 400);
@@ -54,6 +54,59 @@ class AddProduct extends Controller
         } catch (\Exception $e) {
             // Menangani kesalahan
             return response()->json(['success' => false, 'error' => $e->getMessage()], 500);
+        }
+    }
+    public function ViewProduct(Request $request)
+    {
+        // Get data from the session
+        $data = Session::get('data');
+
+        // Check if the data exists in the session
+        if ($data) {
+            // Tampilkan view tambahproduk dengan data dari session
+            return view('tambahproduk', compact('data'));
+        } else {
+            return redirect('/login')->with('error', 'Data not found in the session');
+        }
+    }
+    public function DeleteProduct(Request $request)
+    {
+        // Get the product ID from the request
+        $productId = $request->product_id;
+
+        // Cek apakah token tersedia di session
+        $token = Session::get('jwt');
+
+        if ($token) {
+            // Buat instance client GuzzleHttp
+            $client = new Client();
+
+            try {
+                // Kirim request delete ke API dengan header Authorization
+                $response = $client->request('DELETE', "http://localhost:8080/api/product/{$productId}", [
+                    'headers' => [
+                        'Authorization' => 'Bearer ' . $token
+                    ]
+                ]);
+
+                // Handle the API response
+                $statusCode = $response->getStatusCode();
+                if ($statusCode == 200) {
+                    // dd($statusCode);
+                    // Success, handle accordingly
+                    return redirect('/home')->with('success', 'Product deleted successfully.');
+                } else {
+                    // dd($statusCode);
+                    // Handle other status codes
+                    return redirect('/home')->with('error', 'Failed to delete product. Status Code: ' . $statusCode);
+                }
+            } catch (\Exception $e) {
+                // dd($e);
+                // Handle exceptions if any
+                return redirect('/home')->with('error', 'An error occurred: ' . $e->getMessage());
+            }
+        } else {
+            return redirect('/login')->with('error', 'Token not found');
         }
     }
 }

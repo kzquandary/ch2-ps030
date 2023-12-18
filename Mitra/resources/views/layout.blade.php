@@ -81,7 +81,7 @@
 
                     <!-- User Info -->
                     <div class="user-info">
-                        <h6 class="user-name mb-0">Nur Faid Prasetyo</h6>
+                        <h6 class="user-name mb-0">{{ $data->data[0]->nama }}</h6>
                         <span>Mitra Kulinerin</span>
                     </div>
                 </div>
@@ -89,7 +89,7 @@
                 <!-- Sidenav Nav -->
                 <ul class="sidenav-nav ps-0">
                     <li>
-                        <a href="/"><i class="bi bi-house-door"></i> Home</a>
+                        <a href="/home"><i class="bi bi-house-door"></i> Home</a>
                     </li>
                     <li>
                         <a href="/settings"><i class="bi bi-gear"></i> Settings</a>
@@ -141,7 +141,7 @@
             <div class="footer-nav position-relative">
                 <ul class="h-100 d-flex align-items-center justify-content-between ps-0">
                     <li>
-                        <a href="/">
+                        <a href="/home">
                             <i class="bi bi-house"></i>
                             <span>Home</span>
                         </a>
@@ -202,7 +202,7 @@
                 labels: ['POSITIVE', 'NEGATIVE', 'NETRAL'],
                 datasets: [{
                     label: '% of Sentiment',
-                    data: [2, 1, 0], // Hapus nilai yang tidak diperlukan
+                    data: [23, 7, 5], // Hapus nilai yang tidak diperlukan
                     backgroundColor: [
                         'rgba(40, 167, 69, 0.5)', // Warna untuk POSITIVE
                         'rgba(220, 53, 69, 0.5)', // Warna untuk NEGATIVE

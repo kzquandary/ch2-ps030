@@ -69,54 +69,39 @@
             <div class="card mb-3">
                 <div class="card-body">
                     <div class="row g-3">
-                        <div class="col-6 d-flex flex-column align-items-center">
-                            <strong style="color: black">Ayam Geprek Pak Haji</strong>
-                            <!-- Ubah src untuk menampilkan gambar dari direktori /img/geprek.jfif -->
-                            <img src="/img/geprek.jfif" alt="Geprek Image" style="max-width: 100%; height: auto;"
-                                class="mb-2">
-                            <a class="btn btn-warning btn-block">Ubah Produk</a>
-                            <!-- Switch untuk status Tersedia -->
-                            <div class="form-check form-switch mt-2">
-                                <input class="form-check-input" type="checkbox" id="availabilitySwitch">
-                                <label class="form-check-label" for="availabilitySwitch">Tersedia</label>
+                        @if (!empty($data->data[0]->product_list))
+                            @foreach ($data->data[0]->product_list as $product)
+                                <div class="col-6 d-flex flex-column align-items-center">
+                                    <strong style="color: black">{{ $product->product_name }}</strong>
+                                    <!-- Use the product's image_url -->
+                                    <img src="{{ $product->image_url }}" alt="{{ $product->product_name }} Image"
+                                        style="max-width: 100%; height: auto;" class="mb-2">
+                                    <div class="text-center">
+                                        <!-- Button for updating the product -->
+                                        <a href="#" class="btn btn-warning">Ubah Produk</a>
+                                        <!-- Button for deleting the product -->
+                                        <form action="/delete/{{ $product->product_id }}" method="POST"
+                                            class="d-inline-block">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-danger">Hapus Produk</button>
+                                        </form>
+                                    </div>
+                                    <!-- Switch for product availability -->
+                                    <div class="form-check form-switch mt-2">
+                                        <input class="form-check-input" type="checkbox"
+                                            id="availabilitySwitch{{ $loop->index }}">
+                                        <label class="form-check-label"
+                                            for="availabilitySwitch{{ $loop->index }}">Tersedia</label>
+                                    </div>
+                                </div>
+                            @endforeach
+                        @else
+                            <div class="col-12 text-center">
+                                <p>Belum ada produk.</p>
                             </div>
-                        </div>
-                        <div class="col-6 d-flex flex-column align-items-center">
-                            <strong style="color: black">Ayam Geprek Pak Haji</strong>
-                            <!-- Ubah src untuk menampilkan gambar dari direktori /img/geprek.jfif -->
-                            <img src="/img/geprek.jfif" alt="Geprek Image" style="max-width: 100%; height: auto;"
-                                class="mb-2">
-                            <a class="btn btn-warning btn-block">Ubah Produk</a>
-                            <!-- Switch untuk status Tersedia -->
-                            <div class="form-check form-switch mt-2">
-                                <input class="form-check-input" type="checkbox" id="availabilitySwitch">
-                                <label class="form-check-label" for="availabilitySwitch">Tersedia</label>
-                            </div>
-                        </div>
-                        <div class="col-6 d-flex flex-column align-items-center">
-                            <strong style="color: black">Ayam Geprek Pak Haji</strong>
-                            <!-- Ubah src untuk menampilkan gambar dari direktori /img/geprek.jfif -->
-                            <img src="/img/geprek.jfif" alt="Geprek Image" style="max-width: 100%; height: auto;"
-                                class="mb-2">
-                            <a class="btn btn-warning btn-block">Ubah Produk</a>
-                            <!-- Switch untuk status Tersedia -->
-                            <div class="form-check form-switch mt-2">
-                                <input class="form-check-input" type="checkbox" id="availabilitySwitch">
-                                <label class="form-check-label" for="availabilitySwitch">Tersedia</label>
-                            </div>
-                        </div>
-                        <div class="col-6 d-flex flex-column align-items-center">
-                            <strong style="color: black">Ayam Geprek Pak Haji</strong>
-                            <!-- Ubah src untuk menampilkan gambar dari direktori /img/geprek.jfif -->
-                            <img src="/img/geprek.jfif" alt="Geprek Image" style="max-width: 100%; height: auto;"
-                                class="mb-2">
-                            <a class="btn btn-warning btn-block">Ubah Produk</a>
-                            <!-- Switch untuk status Tersedia -->
-                            <div class="form-check form-switch mt-2">
-                                <input class="form-check-input" type="checkbox" id="availabilitySwitch">
-                                <label class="form-check-label" for="availabilitySwitch">Tersedia</label>
-                            </div>
-                        </div>
+                        @endif
+
 
                         <div class="col-12 d-grid gap-2 align-items-center">
                             <a class="btn btn-primary" href="/addproduct"> Tambah Produk </a>
