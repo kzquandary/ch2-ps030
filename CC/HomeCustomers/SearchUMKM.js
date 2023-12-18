@@ -34,6 +34,7 @@ async function SearchUMKM(req, res) {
                     alamat: seller.alamat,
                     owner: seller.owner,
                     username: seller.username,
+                    image_url: seller.image_url || null, // Include image_url in the response, use null if not assigned
                 };
             });
 

@@ -83,7 +83,7 @@ class AddProduct extends Controller
 
             try {
                 // Kirim request delete ke API dengan header Authorization
-                $response = $client->request('DELETE', "http://localhost:8080/api/product/{$productId}", [
+                $response = $client->request('DELETE', "https://capstoneprojectmicro.as.r.appspot.com/api/product/{$productId}", [
                     'headers' => [
                         'Authorization' => 'Bearer ' . $token
                     ]

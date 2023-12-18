@@ -7,14 +7,17 @@ const GetSeller = async (req, res) => {
 
     const sellersData = sellersSnapshot.docs.map(doc => {
       const sellerData = doc.data();
+      const profile_image = sellerData.profile_image ?? null; // Use null if not assigned
+
       return {
         nama: sellerData.nama,
         no_hp: sellerData.no_hp,
         email: sellerData.email,
-        email: sellerData.owner,
+        owner: sellerData.owner,
         alamat: sellerData.alamat,
         current_location: sellerData.current_location,
         username: sellerData.username,
+        profile_image, // Include profile_image in the response
       };
     });
 
