@@ -81,7 +81,10 @@
 
                     <!-- User Info -->
                     <div class="user-info">
-                        <h6 class="user-name mb-0">{{ $data->data[0]->nama }}</h6>
+                        <h6 class="user-name mb-0">
+                            {{-- {{ $data->data[0]->nama }} --}}
+                            Nur Faid Prasetyo
+                        </h6>
                         <span>Mitra Kulinerin</span>
                     </div>
                 </div>

@@ -75,7 +75,7 @@
                                     <strong style="color: black">{{ $product->product_name }}</strong>
                                     <!-- Use the product's image_url -->
                                     <img src="{{ $product->image_url }}" alt="{{ $product->product_name }} Image"
-                                        style="max-width: 100%; height: auto;" class="mb-2">
+                                        style="max-width: 100%; height: auto;" class="mb-2 rounded-3">
                                     <div class="text-center">
                                         <!-- Button for updating the product -->
                                         <a href="#" class="btn btn-warning">Ubah Produk</a>
