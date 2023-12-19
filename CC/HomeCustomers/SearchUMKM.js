@@ -20,7 +20,7 @@ async function SearchUMKM(req, res) {
             const matchingDocs = querySnapshot.docs.filter(doc => regexPattern.test(doc.data().nama));
 
             if (matchingDocs.length === 0) {
-                res.status(404).json({ success: true, data: [], message: 'No UMKM found for the specified name.' });
+                res.status(404).json({ success: true, sellers: [], message: 'No UMKM found for the specified name.' });
             } else {
                 // Map the UMKM data
                 const umkmList = matchingDocs.map(doc => {
@@ -36,7 +36,7 @@ async function SearchUMKM(req, res) {
                     };
                 });
 
-                res.status(200).json({ success: true, seller: umkmList });
+                res.status(200).json({ success: true, sellers: umkmList });
             }
         } else {
             // Retrieve all sellers if 'nama' parameter is not provided
@@ -44,7 +44,7 @@ async function SearchUMKM(req, res) {
             const allSellersSnapshot = await sellersRef.get();
 
             if (allSellersSnapshot.empty) {
-                res.status(404).json({ success: true, data: [], message: 'No UMKM found.' });
+                res.status(404).json({ success: true, sellers: [], message: 'No UMKM found.' });
             } else {
                 const allSellersList = allSellersSnapshot.docs.map(doc => {
                     const seller = doc.data();
@@ -59,7 +59,7 @@ async function SearchUMKM(req, res) {
                     };
                 });
 
-                res.status(200).json({ success: true, seller: allSellersList });
+                res.status(200).json({ success: true, sellers: allSellersList });
             }
         }
     } catch (error) {
