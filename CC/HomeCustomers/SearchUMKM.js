@@ -4,41 +4,63 @@ async function SearchUMKM(req, res) {
     try {
         const { nama } = req.params;
 
-        // Check if UMKM name is present
-        if (!nama) {
-            return res.status(400).json({ success: false, error: 'UMKM name is required as a route parameter.' });
-        }
-
         // Get reference to the sellers collection
         const sellersRef = firestore.collection('sellers');
 
-        // Create a case-insensitive regex pattern
-        const regexPattern = new RegExp(nama, 'i');
+        if (nama) {
+            // Search for a specific UMKM if the 'nama' parameter is provided
 
-        // Query sellers based on the regex pattern
-        const querySnapshot = await sellersRef.where('nama', '>=', '').where('nama', '<=', '\uf8ff').get();
+            // Create a case-insensitive regex pattern
+            const regexPattern = new RegExp(nama, 'i');
 
-        // Filter documents based on the regex pattern
-        const matchingDocs = querySnapshot.docs.filter(doc => regexPattern.test(doc.data().nama));
+            // Query sellers based on the regex pattern
+            const querySnapshot = await sellersRef.where('nama', '>=', '').where('nama', '<=', '\uf8ff').get();
 
-        if (matchingDocs.length === 0) {
-            res.status(404).json({ success: true, data: [], message: 'No UMKM found for the specified name.' });
+            // Filter documents based on the regex pattern
+            const matchingDocs = querySnapshot.docs.filter(doc => regexPattern.test(doc.data().nama));
+
+            if (matchingDocs.length === 0) {
+                res.status(404).json({ success: true, seller: [], message: 'No UMKM found for the specified name.' });
+            } else {
+                // Map the UMKM data
+                const umkmList = matchingDocs.map(doc => {
+                    const seller = doc.data();
+                    return {
+                        nama: seller.nama,
+                        no_hp: seller.no_hp,
+                        current_location: seller.current_location,
+                        alamat: seller.alamat,
+                        owner: seller.owner,
+                        username: seller.username,
+                        profile_image: seller.profile_image || null,
+                    };
+                });
+
+                res.status(200).json({ success: true, seller: umkmList });
+            }
         } else {
-            // Map the UMKM data
-            const umkmList = matchingDocs.map(doc => {
-                const seller = doc.data();
-                return {
-                    nama: seller.nama,
-                    no_hp: seller.no_hp,
-                    current_location: seller.current_location,
-                    alamat: seller.alamat,
-                    owner: seller.owner,
-                    username: seller.username,
-                    profile_image: seller.profile_image || null,
-                };
-            });
+            // Retrieve all sellers if 'nama' parameter is not provided
 
-            res.status(200).json({ success: true, data: umkmList });
+            const allSellersSnapshot = await sellersRef.get();
+
+            if (allSellersSnapshot.empty) {
+                res.status(404).json({ success: true, seller: [], message: 'No UMKM found.' });
+            } else {
+                const allSellersList = allSellersSnapshot.docs.map(doc => {
+                    const seller = doc.data();
+                    return {
+                        nama: seller.nama,
+                        no_hp: seller.no_hp,
+                        current_location: seller.current_location,
+                        alamat: seller.alamat,
+                        owner: seller.owner,
+                        username: seller.username,
+                        profile_image: seller.profile_image || null,
+                    };
+                });
+
+                res.status(200).json({ success: true, seller: allSellersList });
+            }
         }
     } catch (error) {
         console.error('Error searching UMKM:', error);
