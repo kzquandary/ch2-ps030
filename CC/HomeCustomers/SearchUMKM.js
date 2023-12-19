@@ -22,7 +22,7 @@ async function SearchUMKM(req, res) {
         const matchingDocs = querySnapshot.docs.filter(doc => regexPattern.test(doc.data().nama));
 
         if (matchingDocs.length === 0) {
-            res.status(404).json({ success: false, message: 'No UMKM found for the specified name.' });
+            res.status(404).json({ success: true, data: [], message: 'No UMKM found for the specified name.' });
         } else {
             // Map the UMKM data
             const umkmList = matchingDocs.map(doc => {
@@ -34,7 +34,7 @@ async function SearchUMKM(req, res) {
                     alamat: seller.alamat,
                     owner: seller.owner,
                     username: seller.username,
-                    image_url: seller.image_url || null,
+                    profile_image: seller.profile_image || null,
                 };
             });
 

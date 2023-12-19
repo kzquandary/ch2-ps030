@@ -57,7 +57,7 @@ async function GetUMKMByDomisili(req, res) {
             alamat: seller.alamat,
             owner: seller.owner,
             username: seller.username,
-            image_url: seller.image_url || null, // Include image_url in the response, use null if not assigned
+            profile_image: seller.profile_image || null, // Include image_url in the response, use null if not assigned
           }));
 
         res.status(200).json({ success: true, data: Sellers });

@@ -26,6 +26,7 @@ async function ShoppingCart(req, res) {
             const alamat = decodedToken.alamat;
             // Get reference to the shopping_cart collection
             const shoppingCartRef = firestore.collection('shopping_cart');
+            const productInfo = await getProductInfo(items);
 
             // Query untuk menemukan dokumen spesifik dengan pelanggan dan penjual tertentu
             const query = shoppingCartRef
@@ -37,6 +38,7 @@ async function ShoppingCart(req, res) {
 
             if (querySnapshot.empty) {
                 // Jika tidak ada dokumen ditemukan, buat yang baru
+
                 const cart_id = uuidv4();
                 const newCart = {
                     customers: customers,
@@ -45,6 +47,8 @@ async function ShoppingCart(req, res) {
                     items: [
                         {
                             product_id: items,
+                            product_name: productInfo.product_name,
+                            image_url: productInfo.image_url,
                             qty: 1,
                         },
                     ],
@@ -69,6 +73,8 @@ async function ShoppingCart(req, res) {
                         // Jika product_id belum ada, tambahkan item baru ke array
                         itemsArray.push({
                             product_id: items,
+                            product_name: productInfo.product_name,
+                            image_url: productInfo.image_url,
                             qty: 1,
                         });
                     }
@@ -104,6 +110,26 @@ async function ShoppingCart(req, res) {
         res.status(500).json({ success: false, error: 'Internal Server Error' });
     }
 }
+async function getProductInfo(product_id) {
+    const productQuery = await firestore.collection("product")
+        .where("product_id", "==", product_id)
+        .get();
+
+    if (productQuery.empty) {
+        return null; // Produk tidak ditemukan
+    }
+
+    // Assume there is only one document with the specified product_id
+    const productDoc = productQuery.docs[0];
+    const productData = productDoc.data();
+
+    return {
+        product_id: product_id,
+        product_name: productData.product_name,
+        image_url: productData.image_url,
+    };
+}
+
 
 module.exports = {
     ShoppingCart,

@@ -32,12 +32,15 @@ const { GetUMKMTransaction } = require("./HomeUMKM/GetTransaction");
 const { GetUMKMProfile } = require("./HomeUMKM/GetUMKMProfile");
 const { DeleteProduct } = require("./Product/DeleteProduct");
 const { GetSeller } = require("./HomeCustomers/GetAllUMKM");
+const { AddTransactionByCartId } = require("./Transactions/AddTransactionByCartId");
+const { SearchAllUMKM } = require("./HomeCustomers/SearchAllUMKM");
 routes.get("/", (req, res) => {
   res.status(200).json({ success: true, message: "API Active" });
 });
 
 //Home Routes
 routes.get("/api/home/nearbyumkm", GetUMKMByDomisili);
+routes.get("/api/home/searchumkm", SearchAllUMKM);
 routes.get("/api/home/searchumkm/:nama", SearchUMKM);
 routes.get("/api/home/getallumkm", GetSeller);
 
@@ -83,6 +86,7 @@ routes.get("/api/shopping/total/:id", GetTotalPrice);
 
 // Transaction Routes
 routes.post('/api/transactions', AddTransaction);
+routes.post('/api/transactionsbyid', AddTransactionByCartId);
 routes.get('/api/transactions', GetTransaction);
 routes.get('/api/transactions/:id', GetTransactionById);
 // routes.get('/api/transactions/:id', Transaction);
