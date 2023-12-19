@@ -41,6 +41,7 @@ routes.get("/", (req, res) => {
 //Home Routes
 routes.get("/api/home/nearbyumkm", GetUMKMByDomisili);
 routes.get("/api/home/searchumkm/:nama", SearchUMKM);
+routes.get("/api/home/searchumkm/", SearchUMKM);
 routes.get("/api/home/getallumkm", GetSeller);
 
 // Auth Routes
