@@ -16,7 +16,7 @@ class UlasanController extends Controller
             $client = new Client();
 
             // Kirim request get ke API dengan header Authorization
-            $response = $client->request('GET', 'https://capstoneprojectmicro.as.r.appspot.com/api/sellers/details', [
+            $response = $client->request('GET', 'https://capstoneprojectmicro.as.r.appspot.com/api/review', [
             // $response = $client->request('GET', 'http://localhost:8080/api/review', [
                 'headers' => [
                     'Authorization' => 'Bearer ' . $token
