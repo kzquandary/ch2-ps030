@@ -1,5 +1,6 @@
 const { firestore } = require('../Firebase');
 const jwt = require('jsonwebtoken');
+const axios = require('axios');
 
 async function AddReview(req, res) {
     try {
@@ -27,16 +28,24 @@ async function AddReview(req, res) {
                 return res.status(400).json({ success: false, message: 'Missing required fields' });
             }
 
+            // Make a POST request to the sentiment analysis service
+            const sentimentResponse = await axios.post('https://ml-uqnhhno3aa-an.a.run.app/predict', {
+                review_description,
+            });
+
+            // Extract sentiment from the response
+            const sentiment = sentimentResponse.data.sentimen;
+
             // Get reference to the reviews collection
             const reviewsRef = firestore.collection('review');
 
-            // Add review to the collection
+            // Add review to the collection with the sentiment
             await reviewsRef.add({
                 transaction_id,
                 customers,
                 review_description,
                 sellers,
-                sentimen: 'positive',
+                sentimen: sentiment,
             });
 
             res.status(201).json({ success: true, message: 'Review added successfully' });

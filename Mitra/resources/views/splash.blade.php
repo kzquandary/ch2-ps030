@@ -48,7 +48,7 @@
         <div class="custom-container">
             <!-- Skip Page -->
             <div class="skip-page">
-                <a href="/home">Skip</a>
+                <a href="/login">Skip</a>
             </div>
 
             <!-- Hero Block Content -->
@@ -57,7 +57,7 @@
                 <h2 class="display-4 text-white mb-3">Majukan UMKM Anda bersama Kulinerin</h2>
                 <p class="text-white">Kulinerin adalah platform e-Commerce khusus untuk UMKM di Indonesia. Harap
                     aktifkan lokasi untuk menggunakan layanan kami</p>
-                <a class="btn btn-warning btn-lg w-100" href="/home">Mulai</a>
+                <a class="btn btn-warning btn-lg w-100" href="/login">Mulai</a>
             </div>
         </div>
     </div>

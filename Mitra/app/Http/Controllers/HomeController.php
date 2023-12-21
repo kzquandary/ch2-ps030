@@ -18,6 +18,7 @@ class HomeController extends Controller
 
             // Kirim request get ke API dengan header Authorization
             $response = $client->request('GET', 'https://capstoneprojectmicro.as.r.appspot.com/api/sellers/details', [
+            // $response = $client->request('GET', 'http://localhost:8080/api/sellers/details', [
                 'headers' => [
                     'Authorization' => 'Bearer ' . $token
                 ]
@@ -36,6 +37,18 @@ class HomeController extends Controller
             return view('welcome', compact('data'));
         } else {
             return redirect('/login')->with('error', 'Token not found');
+        }
+    }
+    public function splash()
+    {
+        // Cek apakah token tersedia di session
+        $token = Session::get('jwt');
+
+        if ($token) {
+            // Tampilkan view welcome dengan data response sebagai objek
+            return redirect('/home');
+        } else {
+            return view('/splash');
         }
     }
 

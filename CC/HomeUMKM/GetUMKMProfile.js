@@ -52,6 +52,32 @@ const GetUMKMProfile = async (req, res) => {
           };
         });
 
+        // Get reviews by username
+        const reviewsSnapshot = await firestore
+          .collection("review")
+          .where("sellers", "==", username)
+          .get();
+
+          console.log(reviewsSnapshot);
+        // Calculate sentiments
+        let positiveSentiments = 0;
+        let neutralSentiments = 0;
+        let negativeSentiments = 0;
+
+        reviewsSnapshot.forEach((reviewDoc) => {
+          const review = reviewDoc.data();
+          const sentiment = review.sentimen; // Use "sentiment" instead of "sentimen"
+          console.log("Review Data:", review);
+
+          if (sentiment === "positif") {
+            positiveSentiments++;
+          } else if (sentiment === "netral") {
+            neutralSentiments++;
+          } else if (sentiment === "negatif") {
+            negativeSentiments++;
+          }
+        });
+
         // Extract hanya bidang yang diinginkan dari data penjual
         const filteredsellerData = {
           nama: sellerData.nama,
@@ -62,6 +88,11 @@ const GetUMKMProfile = async (req, res) => {
           current_location: sellerData.current_location,
           username: sellerData.username,
           product_list: productList,
+          sentiments: {
+            positive: positiveSentiments,
+            neutral: neutralSentiments,
+            negative: negativeSentiments,
+          },
         };
 
         return res
@@ -102,6 +133,30 @@ const GetUMKMProfile = async (req, res) => {
           };
         });
 
+        // Get reviews by username
+        const reviewsSnapshot = await firestore
+          .collection("review")
+          .where("seller_username", "==", sellerData.username)
+          .get();
+
+        // Calculate sentiments
+        let positiveSentiments = 0;
+        let neutralSentiments = 0;
+        let negativeSentiments = 0;
+
+        reviewsSnapshot.forEach((reviewDoc) => {
+          const review = reviewDoc.data();
+          const sentiment = review.sentiment;
+
+          if (sentiment === "positive") {
+            positiveSentiments++;
+          } else if (sentiment === "neutral") {
+            neutralSentiments++;
+          } else if (sentiment === "negative") {
+            negativeSentiments++;
+          }
+        });
+
         return {
           nama: sellerData.nama,
           no_hp: sellerData.no_hp,
@@ -110,12 +165,19 @@ const GetUMKMProfile = async (req, res) => {
           owner: sellerData.owner,
           username: sellerData.username,
           product_list: productList,
+          sentiments: {
+            positive: positiveSentiments,
+            neutral: neutralSentiments,
+            negative: negativeSentiments,
+          },
         };
       });
 
       const umkmsWithProducts = await Promise.all(sellersData);
 
-      return res.status(200).json({ success: true, sellers: umkmsWithProducts });
+      return res
+        .status(200)
+        .json({ success: true, sellers: umkmsWithProducts });
     }
   } catch (error) {
     console.error("Error:", error);

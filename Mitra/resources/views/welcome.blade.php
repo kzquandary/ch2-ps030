@@ -154,4 +154,34 @@
             });
         }
     </script>
+    <script>
+        var ctx = document.getElementById("myChart");
+        var myChart = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: ['POSITIVE', 'NEGATIVE', 'NETRAL'],
+                datasets: [{
+                    label: '% of Sentiment',
+                    data: [{{ $data->data[0]->sentiments->positive }},
+                        {{ $data->data[0]->sentiments->negative }},
+                        {{ $data->data[0]->sentiments->neutral }}
+                    ], // Hapus nilai yang tidak diperlukan
+                    backgroundColor: [
+                        'rgba(40, 167, 69, 0.5)', // Warna untuk POSITIVE
+                        'rgba(220, 53, 69, 0.5)', // Warna untuk NEGATIVE
+                        'rgba(255, 193, 7, 0.5)', // Warna untuk NETRAL
+                    ],
+                    borderColor: [
+                        'rgba(40, 167, 69, 1)',
+                        'rgba(220, 53, 69, 1)',
+                        'rgba(255, 193, 7, 1)',
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: false,
+            }
+        });
+    </script>
 @endsection

@@ -17,13 +17,13 @@ async function GetReviewByUsername(req, res) {
             const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
 
             // Get customer information from the token
-            const customers = decodedToken.username;
+            const sellers = decodedToken.username;
 
             // Get reference to the reviews collection
             const reviewsRef = firestore.collection('review');
 
             // Query reviews for the specific customer
-            const query = reviewsRef.where('customers', '==', customers);
+            const query = reviewsRef.where('sellers', '==', sellers);
             const querySnapshot = await query.get();
 
             // If no reviews found
@@ -38,6 +38,7 @@ async function GetReviewByUsername(req, res) {
                     transaction_id: data.transaction_id,
                     review_description: data.review_description,
                     sellers: data.sellers,
+                    customers: data.customers,
                     sentimen: data.sentimen,
                     created_at: data.created_at,
                 };

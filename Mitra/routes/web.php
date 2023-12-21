@@ -5,6 +5,7 @@ use App\Http\Controllers\AddProduct;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\UlasanController;
 
 /*
 |--------------------------------------------------------------------------
@@ -31,9 +32,7 @@ Route::post('/register', [RegisterController::class, 'register']);
 Route::get('/logout', [HomeController::class, 'logout']);
 
 //Home Routes
-Route::get('/', function () {
-    return view('splash');
-});
+Route::get('/', [HomeController::class, 'splash']);
 Route::get('/home', [HomeController::class, 'index']);
 Route::get('/addproduct', [AddProduct::class, 'ViewProduct']);
 
@@ -52,6 +51,5 @@ Route::get('/settings', function () {
 Route::get('/privacy-policy', function () {
     return view('privacy-policy');
 });
-Route::get('/ulasan', function () {
-    return view('ulasan');
-});
+Route::get('/ulasan', [UlasanController::class, 'index']);
+

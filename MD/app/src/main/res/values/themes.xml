@@ -1,0 +1,14 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Base.Theme.Kulinerin" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/Myprimary</item>
+        <item name="colorOnBackground">@color/white_background</item>
+    </style>
+
+    <style name="Theme.Kulinerin" parent="Base.Theme.Kulinerin" />
+
+    <style name="ToolbarTitleText">
+        <item name="android:textSize">22sp</item>
+        <item name="android:textColor">@android:color/white</item>
+    </style>
+</resources>
