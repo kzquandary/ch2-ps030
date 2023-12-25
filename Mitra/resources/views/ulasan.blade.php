@@ -40,16 +40,16 @@
                     <hr class="review-divider">
 
                     <!-- Single Search Result -->
-                    @if (isset($data->data) && count($data->data) > 0)
-                    @foreach ($data->data as $review)
-                        <div class="single-search-result mb-3 border-bottom pb-3">
-                            <h6 class="text-truncate mb-1">{{ $review->customers }}</h6>
-                            <p class="mb-0">{{ $review->review_description }}</p>
-                        </div>
-                    @endforeach
-                @else
-                    <p>No reviews found.</p>
-                @endif
+                    @if (isset($data) && property_exists($data, 'data') && count($data->data) > 0)
+                        @foreach ($data->data as $review)
+                            <div class="single-search-result mb-3 border-bottom pb-3">
+                                <h6 class="text-truncate mb-1">{{ $review->customers }}</h6>
+                                <p class="mb-0">{{ $review->review_description }}</p>
+                            </div>
+                        @endforeach
+                    @else
+                        <p>No reviews found.</p>
+                    @endif
 
 
                 </div>
